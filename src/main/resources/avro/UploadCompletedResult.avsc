@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "UploadCompletedResult",
+  "namespace": "kafka.lab.events.v1",
+  "fields": [
+    {"name": "conversationId", "type": "string"},
+    {"name": "csvfile", "type": "string"},
+    {"name": "audiofile", "type": "string"}
+  ]
+}

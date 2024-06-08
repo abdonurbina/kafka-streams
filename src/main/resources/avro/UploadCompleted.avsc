@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "UploadCompleted",
+  "namespace": "kafka.lab.events.v1",
+  "fields": [
+    { "name": "uploadId", "type": "string" },
+    { "name": "fileStore", "type": "string" },
+    { "name": "fileId", "type": "string" },
+    { "name": "targetFileStore", "type": "string" },
+    { "name": "targetFileId", "type": "string" },
+    { "name": "fileName", "type": "string" }
+  ]
+}

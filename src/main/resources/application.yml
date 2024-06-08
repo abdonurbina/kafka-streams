@@ -1,0 +1,18 @@
+server:
+  port : 8080
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    schema-registry-url: http://localhost:8081
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://localhost:8081
+    consumer:
+      properties:
+        schema.registry.url: http://localhost:8081
+    streams:
+      application-id: kstream-sample-app
+      auto-startup: true
+      state-dir: /tmp/kafka-streams
