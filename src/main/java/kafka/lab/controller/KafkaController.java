@@ -17,16 +17,9 @@ public class KafkaController {
 
     @PostMapping("/publish")
     public void sendMessageToKafkaTopic(@RequestBody UploadCompleted message) {
-        UploadCompleted uploadCompleted = new UploadCompleted();
-        for (int i=0;i<1500;i++){
-            uploadCompleted.setUploadId("123");
-            uploadCompleted.setFileStore("local");
-            uploadCompleted.setFileId("456");
-            uploadCompleted.setTargetFileStore("s3");
-            uploadCompleted.setTargetFileId("789");
-            uploadCompleted.setFileName("example.txt");
+
             producerService.sendMessage(message);
-        }
+
 
 
 
