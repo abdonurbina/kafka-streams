@@ -33,7 +33,7 @@ public class KafkaStreamsTopology {
     @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
     public KafkaStreamsConfiguration kStreamsConfigs() {
         Map<String, Object> props = new HashMap<>();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "ms-sys-callcenter-processor-kstream-by-filename-filestore");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "proteo4.int.callcenter.processor.events");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class.getName());
@@ -42,7 +42,8 @@ public class KafkaStreamsTopology {
     }
 
     @Bean
-    public KStream<String, UploadCompleted> kStream(StreamsBuilder streamsBuilder,SpecificAvroSerde<UploadCompletedResult> uploadCompletedResultSerde) {
+    public KStream<String, UploadCompleted> kStream(StreamsBuilder streamsBuilder,SpecificAvroSerde<UploadCompletedResult> uploadCompletedResultSerde,
+                                                    SpecificAvroSerde<UploadCompleted> uploadCompletedSerde) {
         KStream<String, UploadCompleted> sourceStream = streamsBuilder
                                                             .stream("uploadedfile");
 
@@ -61,7 +62,10 @@ public class KafkaStreamsTopology {
         KStream<String, UploadCompletedResult> joinedStream = transformedStream1.join(
                 transformedStream2,
                 (csvRecord, mp3Record) -> new UploadCompletedResult(csvRecord.getUploadId(), csvRecord.getFileName(), mp3Record.getFileName()),
-                JoinWindows.of(Duration.ofMinutes(60))
+                JoinWindows.of(Duration.ofMinutes(60)),
+                StreamJoined.with(Serdes.String(), uploadCompletedSerde,uploadCompletedSerde)
+                        .withName("selectkey-by-filename-store")
+                        .withStoreName("by-filename-store")
         );
 
         // Enviar el resultado a otro tópico

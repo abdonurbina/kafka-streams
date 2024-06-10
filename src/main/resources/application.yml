@@ -13,6 +13,6 @@ spring:
       properties:
         schema.registry.url: http://localhost:8081
     streams:
-      application-id: kstream-sample-app
+      application-id: proteo4.int.callcenter
       auto-startup: true
       state-dir: /tmp/kafka-streams
